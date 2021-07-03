@@ -1,9 +1,8 @@
-//1
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-//2
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 void main() async {
@@ -12,51 +11,41 @@ void main() async {
   runApp(MyApp());
 }
 
-//3
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final String title = 'Семейные покупки';
     return MaterialApp(
-      title: 'Firebase Auth Demo',
-      home: MyHomePage(title: 'Firebase Auth Demo'),
+      title: title,
+      home: AppStarted(title: title),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({required this.title});
+class AppStarted extends StatelessWidget {
   final String title;
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-//4
+  AppStarted({Key? key, required this.title}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
         actions: <Widget>[
           Builder(builder: (BuildContext context) {
-//5
             return ElevatedButton(
-              child: const Text('Sign out'),
+              child: const Text('Выйти'),
               onPressed: () async {
-                print("aaaaaaaauth  $_auth");
                 final User? user = _auth.currentUser;
-                print("USERRRRRRRRRRRRRRRRRRRRRRR $user");
                 if (user == null) {
-//6
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('No one has signed in.'),
+                    content: Text('Вы не авторизованы'),
                   ));
                   return;
                 }
                 await _auth.signOut();
                 final String uid = user.uid;
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(uid + ' has successfully signed out.'),
+                  content: Text(uid + ' успешный выход.'),
                 ));
               },
             );
@@ -64,7 +53,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Builder(builder: (BuildContext context) {
-//7
         return ListView(
           scrollDirection: Axis.vertical,
           padding: const EdgeInsets.all(16),
@@ -76,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class _RegisterEmailSection extends StatefulWidget {
-  final String title = 'Registration';
+  final String title = 'Регистрация';
   @override
   State<StatefulWidget> createState() => _RegisterEmailSectionState();
 }
@@ -119,17 +107,17 @@ class _RegisterEmailSectionState extends State<_RegisterEmailSection> {
               decoration: const InputDecoration(labelText: 'Email'),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Please enter some text';
+                  return 'Пожалуйста введите почту';
                 }
                 return null;
               },
             ),
             TextFormField(
               controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(labelText: 'Пароль'),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Please enter some text';
+                  return 'Пожалуйста введите пароль';
                 }
                 return null;
               },
@@ -142,7 +130,7 @@ class _RegisterEmailSectionState extends State<_RegisterEmailSection> {
                     _register();
                   }
                 },
-                child: const Text('Submit'),
+                child: const Text('Отправить'),
               ),
             ),
             Container(
@@ -150,8 +138,8 @@ class _RegisterEmailSectionState extends State<_RegisterEmailSection> {
               child: Text(_success == null
                   ? ''
                   : (_success
-                      ? 'Successfully registered ' + _userEmail
-                      : 'Registration failed')),
+                      ? 'Успешная регистрация ' + _userEmail
+                      : 'Регистрация не пройдена, повторите еще раз')),
             )
           ],
         ),
