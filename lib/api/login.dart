@@ -8,9 +8,22 @@ Future checkAuth() async {
   try {
     Uri url = Uri.parse('$serverIp');
     final http.Response response = await http.get(url);
+    Response complitedResponse;
     if (response.statusCode == 200) {
-      final ResponseBody body = ResponseBody(
-          body: json.decode(response.body), status: response.statusCode);
-    } else {}
-  } catch (e) {}
+      ResponseSuccess responseSuccess =
+          ResponseSuccess(body: json.decode(response.body));
+      complitedResponse =
+          Response(body: responseSuccess, status: response.statusCode);
+    } else {
+      ResponseFailure responseFailure =
+          ResponseFailure(body: json.decode(response.body));
+      complitedResponse =
+          Response(body: responseFailure, status: response.statusCode);
+    }
+    return complitedResponse;
+  } catch (e) {
+    final ResponseFailure responseFailure =
+        ResponseFailure(error: e.toString());
+    return Response(body: responseFailure, status: null);
+  }
 }

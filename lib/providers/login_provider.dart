@@ -1,19 +1,31 @@
 import 'dart:async';
+import 'package:family_buy/api/login.dart';
 import 'package:family_buy/enums/login.dart';
+import 'package:family_buy/models/response_model.dart';
 import 'package:flutter/material.dart';
 
 class LoginProvider with ChangeNotifier {
   AppState _appState = AppState.initial;
   Map _user = {"name": "Pavel"};
+  String? _error;
+
+  //getters
   AppState get appState => _appState;
   Map get user => _user;
+  String? get error => _error;
 
   LoginProvider.instance() {
     // check user auth with init app
     initialize();
   }
   Future<void> initialize() async {
-    _appState = AppState.unauth;
+    Response response = await checkAuth();
+    _error = response.body.getError();
+    if (error == null) {
+      _appState = AppState.auth;
+    } else {
+      _appState = AppState.unauth;
+    }
     notifyListeners();
   }
 
