@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:family_buy/enums/login.dart';
 import 'package:flutter/material.dart';
 
@@ -9,24 +8,20 @@ class LoginProvider with ChangeNotifier {
   AppState get appState => _appState;
   Map get user => _user;
 
-  // FAKE_DATA
-  bool mokeAuth = false;
-
   LoginProvider.instance() {
-    // check user auth with init app(fake request with duration)
-    Future.delayed(Duration(seconds: 2), initialize);
+    // check user auth with init app
+    initialize();
   }
-  void initialize() {
-    if (mokeAuth) {
-      _appState = AppState.auth;
-    } else {
-      _appState = AppState.unauth;
-    }
+  Future<void> initialize() async {
+    _appState = AppState.unauth;
     notifyListeners();
   }
 
-  // login
-  Future<bool> login(String email, String password) async {
+  // signUp
+  Future<void> signUp(String email, String password) async {}
+
+  // signIn
+  Future<bool> signIn(String email, String password) async {
     try {
       _appState = AppState.authenticating;
       // api request for login (api/login)
@@ -41,8 +36,8 @@ class LoginProvider with ChangeNotifier {
     }
   }
 
-  // logout
-  Future<bool> logout() async {
+  // signOut
+  Future<bool> signOut() async {
     try {
       // api request for logout (api/logout)
       _appState = AppState.unauth;

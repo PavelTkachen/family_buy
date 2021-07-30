@@ -10,7 +10,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("HomeScreen"),
+        title: Text("Домашняя страница"),
       ),
       body: Center(
         child: Column(
@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
             Text(user['email']),
             ElevatedButton(
                 onPressed: () {
-                  context.read<LoginProvider>().logout();
+                  context.read<LoginProvider>().signOut();
                 },
                 child: Text("Выход"))
           ],
